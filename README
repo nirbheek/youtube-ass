@@ -14,6 +14,13 @@ This conversion script tries to maintain:
 Positioning is hard to translated into ASS format because it uses Margins
 instead of x/y and there's very little control over vertical spacing.
 
+TODO:
+* Support languages other than English
+* Try to use ASS Picture Event lines to create transparent text boxes
+* Use ffmpeg to mux the audio/video/subtitle streams into mkv
+* What about automatic captions?
+* More that I'm forgetting.
+
 Released under the Public Domain License
 
 Created for use by youtube-dl
