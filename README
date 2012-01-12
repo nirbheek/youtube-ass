@@ -1,0 +1,19 @@
+Code to download and convert Youtube XML annotations to ASS format
+http://en.wikipedia.org/wiki/SubStation_Alpha#Advanced_SubStation_Alpha
+
+Details about the ASS file format can be found at:
+* http://www.matroska.org/technical/specs/subtitles/ssa.html
+* http://moodub.free.fr/video/ass-specs.doc
+
+This conversion script tries to maintain:
+
+* Correct timing and text
+* Font colour and background colour (can be improved)
+* Positioning and width of subtitle text around the video
+
+Positioning is hard to translated into ASS format because it uses Margins
+instead of x/y and there's very little control over vertical spacing.
+
+Released under the Public Domain License
+
+Created for use by youtube-dl
