@@ -23,4 +23,8 @@ TODO:
 
 Released under the Public Domain License
 
-Created for use by youtube-dl
+No code references were used while writing this parser, hence it's free of
+derivative licensing problems.
+
+Created for use by youtube-dl:
+* https://github.com/rg3/youtube-dl/issues/90
