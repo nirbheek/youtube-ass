@@ -103,11 +103,26 @@ class YoutubeAss(object):
         for each in self.xml.find('annotations').findall('annotation'):
             # We use annotation ids as dict keys to match events with styles
             ant_id = each.get('id')
+            if each.get('type') != "text":
+                print("Skipping non-text annotation with id: "+ant_id)
+                continue
+            if not hasattr(each.find('TEXT'), "text"):
+                print("Skipping empty annotation with id: "+ant_id)
+                continue
             text = each.find('TEXT').text
-            box = each.find('segment').find('movingRegion').findall('rectRegion')
+            moving_region = each.find('segment').find('movingRegion')
+            box = moving_region.findall('rectRegion')
+            if not box:
+                box = moving_region.findall('anchoredRegion')
+            if not box:
+                print("No known regions inside <movingRegion>? Skipping...")
+                continue
             # Make sure the order is preserved
             t1 = min(box[0].get('t'), box[1].get('t'))
             t2 = max(box[0].get('t'), box[1].get('t'))
+            if "never" in (t1, t2):
+                print("Found annotation that shouldn't be shown, skipping...")
+                continue
             # Extract box dimensions and position
             (x, y, w, h) = map(float, (box[0].get(i) for i in ('x','y','w','h')))
             # Convert text box position to ASS title position
