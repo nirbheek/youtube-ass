@@ -8,6 +8,8 @@ __authors__  = (
 __license__ = 'Public Domain'
 __version__ = '2012.01.12'
 
+DEBUG = False
+
 import xml.etree.ElementTree
 
 class YoutubeAss(object):
@@ -162,7 +164,7 @@ class YoutubeAss(object):
             "Italic": "0", "BorderStyle": "1", "Outline": "0.1", "Shadow": "0.2",
             "Encoding": "0",
         }
-        for (name, data) in self.styles.iteritems():
+        for (name, data) in self.styles.items():
             data.update(misc_data)
             line = "Style: {Name},{Fontname},{Fontsize},{PrimaryColour}," \
             "{PrimaryColour},{PrimaryColour},{BackColour},{Bold}," \
@@ -181,7 +183,7 @@ class YoutubeAss(object):
             "Marked": "Marked=0", "Name": "Speaker", "MarginL": "0",
             "MarginR": "0", "MarginV": "0", "Effect": "",
         }
-        for (name, data) in self.events.iteritems():
+        for (name, data) in self.events.items():
             data.update(misc_data)
             line = "Dialogue: {Marked},{Start},{End},{Style}," \
             "{Name},{MarginL},{MarginR},{MarginV},{Effect},{Text}" \
@@ -198,13 +200,20 @@ class YoutubeAss(object):
             f.write("\n")
 
 if __name__ == "__main__":
-    import sys, urllib2
+    import sys
+    try:
+        from urllib2 import urlopen
+    except ImportError:
+        from urllib.request import urlopen
     if len(sys.argv) < 2 or sys.argv[1] in ("--help", "-h"):
         print("Usage: {0} <youtube video id>".format(sys.argv[0]))
         exit(0)
     video_id = sys.argv[1]
     url = "http://youtube.com/annotations/read2?feat=TCS&video_id=" + video_id
-    xml_data = urllib2.urlopen(url).read()
+    xml_data = urlopen(url).read()
+    if DEBUG:
+        with open(video_id+'-annotations.xml', 'w') as f:
+            f.write(str(xml_data))
     ass = YoutubeAss(xml_data)
     ass.save("{0}.ass".format(video_id))
 
