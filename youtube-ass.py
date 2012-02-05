@@ -129,12 +129,17 @@ class YoutubeAss(object):
             (x, y, w, h) = map(float, (box[0].get(i) for i in ('x','y','w','h')))
             # Convert text box position to ASS title position
             (align, margins) = self._get_pos(x, y, w, h)
-            # Font colour
-            fgColor = each.find('appearance').get('fgColor')
-            # TODO: convert this into an ABGR box using Picture event lines
-            # so that it matches the youtube annotations view.
-            # BackColour is the "Outline" of the text, not exactly what we want
-            bgColor = each.find('appearance').get('bgColor')
+            if each.find('appearance') is not None:
+                # Font colour
+                fgColor = each.find('appearance').get('fgColor')
+                # TODO: convert this into an ABGR box using Picture event lines
+                # so that it matches the youtube annotations view.
+                # BackColour is the "Outline" of the text, not exactly what we want
+                bgColor = each.find('appearance').get('bgColor')
+            else:
+                # There's no colour, let's use black/white
+                fgColor = '1'
+                bgColor = '0'
             self.events.update({
                 ant_id: {"Text": text, "Start": t1, "End": t2},
             })
